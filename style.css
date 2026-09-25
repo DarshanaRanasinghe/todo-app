@@ -1,26 +1,26 @@
-body{
+body {
   background-color: #d6f3ff;
   padding: 20px;
   border-radius: 5px;
 }
-#todoList{
+#todoList {
   border: 1px solid #000000;
   padding: 20px;
   text-align: center;
   background-color: #e2616c;
 }
-#todoInput{
+#todoInput {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #000000;
-    background-color: #63d19a;
+  background-color: #63d19a;
 }
-#addTodoButton{
+#addTodoButton {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #000000;
   background-color: #a3fd97;
   cursor: pointer;
-  font-size:16px;
-  margin-left:50px;
+  font-size: 16px;
+  margin-left: 50px;
 }
