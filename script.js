@@ -1,6 +1,8 @@
 const addTodoButton = document.getElementById("addTodoButton");
 const todoInput = document.getElementById("todoInput");
 
+let todos = [];
+
 addTodoButton.addEventListener("click", function () {
   const li = document.createElement("li"); // create list item element in the html
   const span = document.createElement("span"); // create span element to store the valur of todoInput
@@ -32,7 +34,14 @@ addTodoButton.addEventListener("click", function () {
 
   });
 
+  
+const todo = {
+    text: span.textContent,
+    completed: checkBox.checked
+};
 
-  localStorage.setItem("todos", document.getElementById("todoItems").innerHTML);
+todos.push(todo);
+
+localStorage.setItem("todos", JSON.stringify(todos));
 
 });
