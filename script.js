@@ -1,7 +1,19 @@
 const addTodoButton = document.getElementById("addTodoButton");
 const todoInput = document.getElementById("todoInput");
-
 let todos = [];
+const savedTodos = localStorage.getItem("todos");
+const todos = JSON.parse(savedTodos);
+
+if (savedTodos) {
+
+    // load saved todos
+
+} else {
+
+    // use empty array
+
+}
+
 
 addTodoButton.addEventListener("click", function () {
   const li = document.createElement("li"); // create list item element in the html
@@ -34,14 +46,14 @@ addTodoButton.addEventListener("click", function () {
 
   });
 
-  
-const todo = {
+
+  const todo = {
     text: span.textContent,
     completed: checkBox.checked
-};
+  };
 
-todos.push(todo);
+  todos.push(todo);
 
-localStorage.setItem("todos", JSON.stringify(todos));
+  localStorage.setItem("todos", JSON.stringify(todos));
 
 });
