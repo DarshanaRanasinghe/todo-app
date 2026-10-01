@@ -1,21 +1,37 @@
 const addTodoButton = document.getElementById("addTodoButton");
 const todoInput = document.getElementById("todoInput");
+
 let todos = [];
+
 const savedTodos = localStorage.getItem("todos");
-const todos = JSON.parse(savedTodos);
+
 
 if (savedTodos) {
 
-    // load saved todos
+  todos = JSON.parse(savedTodos);
 
 } else {
 
-    // use empty array
-
+  // use empty array
+  todos = [];
 }
 
-
 addTodoButton.addEventListener("click", function () {
+  // call the displayTodo function to display the todo item in the HTML  
+  displayTodo();
+  const todo = {
+    text: span.textContent,
+    completed: checkBox.checked
+  };
+
+  todos.push(todo);
+
+  localStorage.setItem("todos", JSON.stringify(todos));
+
+});
+
+
+function displayTodo(todo) {
   const li = document.createElement("li"); // create list item element in the html
   const span = document.createElement("span"); // create span element to store the valur of todoInput
   const checkBox = document.createElement("input"); // create input field, type is checkbox,
@@ -46,14 +62,4 @@ addTodoButton.addEventListener("click", function () {
 
   });
 
-
-  const todo = {
-    text: span.textContent,
-    completed: checkBox.checked
-  };
-
-  todos.push(todo);
-
-  localStorage.setItem("todos", JSON.stringify(todos));
-
-});
+}
