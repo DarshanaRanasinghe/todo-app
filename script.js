@@ -3,62 +3,151 @@ const todoInput = document.getElementById("todoInput");
 
 let todos = [];
 
-const savedTodos = localStorage.getItem("todos");
 
+// Get saved todos from localStorage
+const savedTodos = localStorage.getItem("todos");
 
 if (savedTodos) {
 
+  // Convert the string from localStorage back into an array
   todos = JSON.parse(savedTodos);
 
-} else {
-
-  // use empty array
-  todos = [];
 }
 
-addTodoButton.addEventListener("click", function () {
-  // call the displayTodo function to display the todo item in the HTML  
-  displayTodo();
-  const todo = {
-    text: span.textContent,
-    completed: checkBox.checked
-  };
 
-  todos.push(todo);
+// Display all saved todos when the page loads
+todos.forEach(function (todo) {
 
-  localStorage.setItem("todos", JSON.stringify(todos));
+  displayTodo(todo);
 
 });
 
 
+// Add new todo
+addTodoButton.addEventListener("click", function () {
+
+  // Get the text entered by the user
+  const todo = {
+    text: todoInput.value,
+    completed: false
+  };
+
+
+  // Add the todo to the array
+  todos.push(todo);
+
+
+  // Save the updated array to localStorage
+  localStorage.setItem("todos", JSON.stringify(todos));
+
+
+  // Display the new todo in the HTML
+  displayTodo(todo);
+
+
+  // Clear the input box
+  todoInput.value = "";
+
+});
+
+
+// Function to display a todo
 function displayTodo(todo) {
-  const li = document.createElement("li"); // create list item element in the html
-  const span = document.createElement("span"); // create span element to store the valur of todoInput
-  const checkBox = document.createElement("input"); // create input field, type is checkbox,
-  const deleteButton = document.createElement("button"); // cretate the delete button
 
-  span.textContent = todoInput.value; // add the value of todoInput to the span
-  document.getElementById("todoItems").appendChild(li); // insert list item into the unOrded list in the HTML
+  // Create the list item
+  const li = document.createElement("li");
 
-  checkBox.type = "checkbox"; // change the input field type to checkbox
-  li.appendChild(checkBox); // make the checkbox inside the list item
+
+  // Create the span for todo text
+  const span = document.createElement("span");
+
+
+  // Create the checkbox
+  const checkBox = document.createElement("input");
+
+
+  // Create the delete button
+  const deleteButton = document.createElement("button");
+
+
+  // Put todo text inside the span
+  span.textContent = todo.text;
+
+
+  // Set checkbox type
+  checkBox.type = "checkbox";
+
+
+  // Set checkbox state
+  checkBox.checked = todo.completed;
+
+
+  // If todo is already completed
+  if (todo.completed) {
+
+    span.classList.add("completed");
+
+  }
+
+
+  // Add checkbox and text to the list item
+  li.appendChild(checkBox);
   li.appendChild(span);
-  todoInput.value = ""; //resetting values of the todoInput field in HTML
 
-  deleteButton.textContent = "Delete"; // name the button as 'delete'
-  li.appendChild(deleteButton); // assing the delete button inside the list item
 
-  deleteButton.addEventListener("click", function () {
-    li.remove(); // when user click the deleteButton list item will remove
-  });
+  // Set delete button text
+  deleteButton.textContent = "Delete";
 
+
+  // Add delete button to list item
+  li.appendChild(deleteButton);
+
+
+  // Add list item to the HTML
+  document.getElementById("todoItems").appendChild(li);
+
+
+  // Checkbox change event
   checkBox.addEventListener("change", function () {
 
+    // Update the todo object's completed value
+    todo.completed = checkBox.checked;
+
+
     if (checkBox.checked) {
+
       span.classList.add("completed");
+
     } else {
+
       span.classList.remove("completed");
+
     }
+
+
+    // Save the updated todos to localStorage
+    localStorage.setItem("todos", JSON.stringify(todos));
+
+  });
+
+
+  // Delete button event
+  deleteButton.addEventListener("click", function () {
+
+    // Remove the todo from the HTML
+    li.remove();
+
+
+    // Find the todo inside the array
+    const todoIndex = todos.indexOf(todo);
+
+
+    // Remove the todo from the array
+    todos.splice(todoIndex, 1);
+
+
+    // Save the updated array
+    localStorage.setItem("todos", JSON.stringify(todos));
 
   });
 
