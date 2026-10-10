@@ -8,13 +8,12 @@ const savedTodos = localStorage.getItem("todos");
 
 if (savedTodos) {
   todos = JSON.parse(savedTodos);  // Convert the string from localStorage back into an array
-
 }
 
 // Display all saved todos when the page loads
 todos.forEach(function (todo) {
   displayTodo(todo);
-});1
+});
 
 // Add new todo
 addTodoButton.addEventListener("click", function () {
