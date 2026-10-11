@@ -17,8 +17,17 @@ todos.forEach(function (todo) {
 
 // Add new todo
 addTodoButton.addEventListener("click", function () {
+
+  const text = todoInput.value.trim();
+
+  if (text === "") {
+    alert("Please enter a todo!");
+    return;
+  }
+
+
   const todo = {
-    text: todoInput.value, // Get the text entered by the user
+    text: text, // Get the text entered by the user
     completed: false,
   };
   // Add the todo to the array
