@@ -3,21 +3,68 @@ const todoInput = document.getElementById("todoInput");
 
 let todos = [];
 
-// Get saved todos from localStorage
-const savedTodos = localStorage.getItem("todos");
+const savedTodos = localStorage.getItem("todos"); // Get saved todos from localStorage
 
 if (savedTodos) {
-  todos = JSON.parse(savedTodos);  // Convert the string from localStorage back into an array
+  todos = JSON.parse(savedTodos); // Convert the string from localStorage back into an array
 }
 
-// Display all saved todos when the page loads
 todos.forEach(function (todo) {
+  // Display all saved todos when the page loads
   displayTodo(todo);
 });
 
-// Add new todo
-addTodoButton.addEventListener("click", function () {
+addTodoButton.addEventListener("click", addTodo); // Add new todo
 
+function displayTodo(todo) {
+  // Function to display a todo
+  const li = document.createElement("li"); // Create the list item
+  const span = document.createElement("span"); // Create the span for todo text
+  const checkBox = document.createElement("input"); // Create the checkbox
+  const deleteButton = document.createElement("button"); // Create the delete button
+  const editButton = document.createElement("button");
+  editButton.textContent = "Edit";
+
+  editButton.addEventListener("click", function () {
+    editTodo(todo, span);
+  });
+
+  span.textContent = todo.text; // Put todo text inside the span
+  checkBox.type = "checkbox"; // Set checkbox type
+  checkBox.checked = todo.completed; // Set checkbox state
+  if (todo.completed) {
+    // If todo is already completed
+    span.classList.add("completed");
+  }
+  li.appendChild(checkBox); // Add checkbox and text to the list item
+  li.appendChild(span);
+  deleteButton.textContent = "Delete"; // Set delete button text
+  li.appendChild(deleteButton); // Add delete button to list item
+  li.appendChild(editButton);
+  document.getElementById("todoItems").appendChild(li); // Add list item to the HTML
+  checkBox.addEventListener("change", function () {
+    // Checkbox change event
+    todo.completed = checkBox.checked; // Update the todo object's completed value
+    if (checkBox.checked) {
+      span.classList.add("completed");
+    } else {
+      span.classList.remove("completed");
+    }
+    saveTodos(); // Save the updated todos to localStorage
+  });
+
+  deleteButton.addEventListener("click", function () {
+    // Delete button event
+
+    deleteTodo(todo, li);
+  });
+}
+
+function saveTodos() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+function addTodo() {
   const text = todoInput.value.trim();
 
   if (text === "") {
@@ -25,92 +72,39 @@ addTodoButton.addEventListener("click", function () {
     return;
   }
 
-
   const todo = {
     text: text, // Get the text entered by the user
     completed: false,
   };
-  // Add the todo to the array
-  todos.push(todo);
 
-  // Save the updated array to localStorage
-  localStorage.setItem("todos", JSON.stringify(todos));
+  todos.push(todo); // Add the todo to the array
+  saveTodos(); // Save the updated array to localStorage
+  displayTodo(todo); // Display the new todo in the HTML
+  todoInput.value = ""; // Clear the input box
+}
 
-  // Display the new todo in the HTML
-  displayTodo(todo);
+function deleteTodo(todo, li) {
+  li.remove();
+  const todoIndex = todos.indexOf(todo); // Find the todo inside the array
+  todos.splice(todoIndex, 1); // Remove the todo from the array
+  saveTodos(); // Save the updated array
+}
 
-  // Clear the input box
-  todoInput.value = "";
-});
+function editTodo(todo, span) {
+  const newText = prompt("Edit your todo:", todo.text);
 
-// Function to display a todo
-function displayTodo(todo) {
-  // Create the list item
-  const li = document.createElement("li");
-
-  // Create the span for todo text
-  const span = document.createElement("span");
-
-  // Create the checkbox
-  const checkBox = document.createElement("input");
-
-  // Create the delete button
-  const deleteButton = document.createElement("button");
-
-  // Put todo text inside the span
-  span.textContent = todo.text;
-
-  // Set checkbox type
-  checkBox.type = "checkbox";
-
-  // Set checkbox state
-  checkBox.checked = todo.completed;
-
-  // If todo is already completed
-  if (todo.completed) {
-    span.classList.add("completed");
+  if (newText === null) {
+    return;
   }
 
-  // Add checkbox and text to the list item
-  li.appendChild(checkBox);
-  li.appendChild(span);
+  if (newText.trim() === "") {
+    alert("Todo cannot be empty!");
+    return;
+  }
 
-  // Set delete button text
-  deleteButton.textContent = "Delete";
+  todo.text = newText.trim();
 
-  // Add delete button to list item
-  li.appendChild(deleteButton);
+  span.textContent = todo.text;
 
-  // Add list item to the HTML
-  document.getElementById("todoItems").appendChild(li);
-
-  // Checkbox change event
-  checkBox.addEventListener("change", function () {
-    // Update the todo object's completed value
-    todo.completed = checkBox.checked;
-
-    if (checkBox.checked) {
-      span.classList.add("completed");
-    } else {
-      span.classList.remove("completed");
-    }
-
-    // Save the updated todos to localStorage
-    localStorage.setItem("todos", JSON.stringify(todos));
-  });
-
-  // Delete button event
-  deleteButton.addEventListener("click", function () {
-    // Remove the todo from the HTML
-    li.remove();
-
-    // Find the todo inside the array
-    const todoIndex = todos.indexOf(todo);
-
-    // Remove the todo from the array
-    todos.splice(todoIndex, 1);
-
-    // Save the updated array
-    localStorage.setItem("todos", JSON.stringify(todos));
-  });
+  saveTodos();
 }
